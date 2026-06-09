@@ -1,0 +1,1837 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="DIPAMEX - Distribuidora Papelera Mayorista y Minorista líder en Tuxtla Gutiérrez, Chiapas. Papelería, artículos escolares, de oficina y suministros empresariales.">
+<meta name="keywords" content="papelería, distribuidora, mayoreo, artículos escolares, oficina, Tuxtla Gutiérrez, Chiapas, DIPAMEX">
+<title>DIPAMEX Papelerías | Distribuidora Mayorista y Minorista - Tuxtla Gutiérrez, Chiapas</title>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600&family=Caveat:wght@400;600&display=swap" rel="stylesheet">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<!-- GSAP -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
+
+<style>
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --green-deep: #1B5E20;
+  --green-forest: #2E7D32;
+  --green-medium: #388E3C;
+  --green-lime: #7CB342;
+  --green-light: #AED581;
+  --green-pale: #F1F8E9;
+  --cream: #FAFDF5;
+  --paper: #FFFEF5;
+  --white: #FFFFFF;
+  --dark: #1A1A2E;
+  --gray: #546E7A;
+  --gray-light: #ECEFF1;
+  --accent-gold: #F9A825;
+  --shadow-lg: 0 20px 60px rgba(0,0,0,0.12);
+  --shadow-xl: 0 30px 80px rgba(0,0,0,0.18);
+  --radius: 16px;
+  --radius-lg: 24px;
+}
+
+html { scroll-behavior: smooth; overflow-x: hidden; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--cream);
+  color: var(--dark);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--green-pale); }
+::-webkit-scrollbar-thumb { background: var(--green-forest); border-radius: 3px; }
+
+/* ===== LOADING SCREEN ===== */
+#loader {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--green-deep);
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 24px;
+}
+#loader .loader-logo {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 3rem; font-weight: 900;
+  color: white; letter-spacing: 4px;
+  opacity: 0;
+}
+#loader .loader-bar-wrap {
+  width: 200px; height: 4px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 2px; overflow: hidden;
+}
+#loader .loader-bar {
+  height: 100%; width: 0%;
+  background: var(--green-lime);
+  border-radius: 2px;
+  transition: width 1.8s ease;
+}
+#loader .loader-sub {
+  font-family: 'Caveat', cursive;
+  color: var(--green-light); font-size: 1.2rem;
+  opacity: 0;
+}
+
+/* ===== BACKGROUND NOTEBOOK ===== */
+.notebook-bg {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-color: var(--paper);
+}
+.notebook-bg::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    repeating-linear-gradient(
+      transparent,
+      transparent 31px,
+      #c8e6c9 31px,
+      #c8e6c9 32px
+    );
+  opacity: 0.35;
+}
+.notebook-bg::after {
+  content: '';
+  position: absolute;
+  left: 72px; top: 0; bottom: 0; width: 2px;
+  background: rgba(239, 154, 154, 0.4);
+}
+
+/* ===== PARTICLES ===== */
+#particles-canvas {
+  position: fixed; inset: 0; z-index: 1; pointer-events: none;
+}
+
+/* ===== NAVBAR ===== */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 48px;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(46,125,50,0.1);
+  transition: all 0.3s ease;
+}
+nav.scrolled {
+  padding: 10px 48px;
+  box-shadow: 0 4px 30px rgba(0,0,0,0.08);
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 10px;
+  text-decoration: none;
+}
+.nav-logo .logo-icon {
+  width: 44px; height: 44px; position: relative;
+}
+.nav-logo .logo-icon svg { width: 100%; height: 100%; }
+.nav-logo .logo-text {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 900; font-size: 1.5rem;
+  color: var(--green-deep); letter-spacing: 2px;
+  line-height: 1;
+}
+.nav-logo .logo-sub {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.6rem; font-weight: 600;
+  letter-spacing: 3px; color: var(--green-medium);
+  text-transform: uppercase;
+}
+.nav-links {
+  display: flex; gap: 32px; list-style: none; align-items: center;
+}
+.nav-links a {
+  text-decoration: none; font-weight: 600; font-size: 0.875rem;
+  color: var(--dark); letter-spacing: 0.5px;
+  position: relative; padding: 4px 0;
+  transition: color 0.3s;
+}
+.nav-links a::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+  height: 2px; background: var(--green-lime);
+  transform: scaleX(0); transition: transform 0.3s ease;
+  border-radius: 2px;
+}
+.nav-links a:hover { color: var(--green-forest); }
+.nav-links a:hover::after { transform: scaleX(1); }
+.nav-cta {
+  background: var(--green-forest);
+  color: white !important; padding: 10px 22px !important;
+  border-radius: 50px; transition: all 0.3s ease !important;
+}
+.nav-cta:hover { background: var(--green-deep) !important; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(46,125,50,0.4); }
+.nav-cta::after { display: none !important; }
+
+/* Hamburger */
+.nav-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; }
+.nav-toggle span { display: block; width: 26px; height: 2px; background: var(--green-deep); transition: all 0.3s; border-radius: 2px; }
+
+/* ===== HERO SECTION ===== */
+#hero {
+  position: relative; z-index: 10;
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; padding: 120px 48px 80px;
+}
+.hero-content {
+  max-width: 1200px; width: 100%;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
+  align-items: center;
+}
+.hero-text { position: relative; z-index: 2; }
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--green-pale); border: 1px solid rgba(124,179,66,0.4);
+  border-radius: 50px; padding: 6px 16px; margin-bottom: 20px;
+  font-family: 'Caveat', cursive; font-size: 1rem; color: var(--green-forest);
+}
+.hero-eyebrow::before { content: '✦'; font-size: 0.7rem; }
+.hero-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(3rem, 6vw, 5.5rem);
+  font-weight: 900; line-height: 0.9;
+  color: var(--green-deep); letter-spacing: -2px;
+  margin-bottom: 8px;
+}
+.hero-title .highlight {
+  background: linear-gradient(135deg, var(--green-lime), var(--green-forest));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-subtitle {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(0.9rem, 1.5vw, 1.1rem); font-weight: 400;
+  color: var(--gray); margin: 20px 0 36px; line-height: 1.7;
+  max-width: 480px;
+}
+.hero-buttons { display: flex; gap: 16px; flex-wrap: wrap; }
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: linear-gradient(135deg, var(--green-forest), var(--green-deep));
+  color: white; text-decoration: none;
+  padding: 16px 32px; border-radius: 50px;
+  font-family: 'Montserrat', sans-serif; font-weight: 700;
+  font-size: 0.95rem; letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 30px rgba(46,125,50,0.35);
+}
+.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(46,125,50,0.45); }
+.btn-secondary {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: transparent;
+  border: 2px solid var(--green-forest);
+  color: var(--green-forest); text-decoration: none;
+  padding: 14px 28px; border-radius: 50px;
+  font-family: 'Montserrat', sans-serif; font-weight: 700;
+  font-size: 0.95rem; letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+.btn-secondary:hover {
+  background: var(--green-forest); color: white;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(46,125,50,0.25);
+}
+.hero-stats {
+  display: flex; gap: 32px; margin-top: 48px;
+  padding-top: 32px;
+  border-top: 1px solid rgba(46,125,50,0.15);
+}
+.hero-stat .num {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2rem; font-weight: 900; color: var(--green-forest);
+  line-height: 1;
+}
+.hero-stat .label {
+  font-size: 0.75rem; font-weight: 600;
+  color: var(--gray); letter-spacing: 1px;
+  text-transform: uppercase; margin-top: 4px;
+}
+
+/* Hero Visual */
+.hero-visual {
+  position: relative; display: flex;
+  align-items: center; justify-content: center;
+}
+.notebook-open {
+  position: relative; width: 100%; max-width: 480px;
+  aspect-ratio: 3/4;
+}
+.notebook-page {
+  width: 100%; height: 100%;
+  background: white;
+  border-radius: 4px 20px 20px 4px;
+  box-shadow: var(--shadow-xl), -8px 0 0 #e8e8e8, -16px 0 0 #d8d8d8;
+  position: relative; overflow: hidden;
+  transform-origin: left center;
+}
+.notebook-lines {
+  position: absolute; inset: 60px 30px 30px;
+  background-image: repeating-linear-gradient(
+    transparent, transparent 29px,
+    #e3f2fd 29px, #e3f2fd 30px
+  );
+}
+.notebook-hole {
+  position: absolute; left: 30px; top: 50%;
+  transform: translateY(-50%);
+  display: flex; flex-direction: column; gap: 60px;
+}
+.notebook-hole::before,
+.notebook-hole::after,
+.notebook-hole span {
+  content: '';
+  display: block;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--cream);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+}
+.notebook-hole span { display: block; }
+
+/* SVG doodles inside notebook */
+.doodles-container {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* Floating elements around notebook */
+.float-el {
+  position: absolute;
+  animation: floatEl 6s ease-in-out infinite;
+}
+.float-el:nth-child(1) { top: -20px; right: -30px; animation-delay: 0s; }
+.float-el:nth-child(2) { bottom: 20px; right: -40px; animation-delay: 1.5s; }
+.float-el:nth-child(3) { top: 30%; left: -40px; animation-delay: 0.8s; }
+.float-el:nth-child(4) { bottom: -10px; left: 20px; animation-delay: 2.2s; }
+.float-el:nth-child(5) { top: -10px; left: 30%; animation-delay: 1s; }
+
+@keyframes floatEl {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-12px) rotate(5deg); }
+}
+
+.float-card {
+  background: white; border-radius: var(--radius);
+  padding: 12px 16px;
+  box-shadow: var(--shadow-lg);
+  display: flex; align-items: center; gap: 10px;
+  white-space: nowrap;
+}
+.float-card .icon { font-size: 1.5rem; }
+.float-card .info .title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700; font-size: 0.8rem; color: var(--dark);
+}
+.float-card .info .sub {
+  font-size: 0.65rem; color: var(--gray); margin-top: 2px;
+}
+
+/* ===== SECTIONS GENERAL ===== */
+section { position: relative; z-index: 10; }
+
+.section-inner {
+  max-width: 1200px; margin: 0 auto; padding: 0 48px;
+}
+
+.section-label {
+  font-family: 'Caveat', cursive;
+  font-size: 1.1rem; color: var(--green-lime);
+  letter-spacing: 2px; margin-bottom: 12px;
+  display: flex; align-items: center; gap: 8px;
+}
+.section-label::before { content: '—'; }
+
+.section-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 900; line-height: 1.1;
+  color: var(--green-deep); margin-bottom: 16px;
+  letter-spacing: -1px;
+}
+
+.section-desc {
+  font-size: 1.05rem; color: var(--gray);
+  line-height: 1.75; max-width: 600px;
+}
+
+/* ===== ABOUT SECTION ===== */
+#about {
+  padding: 120px 0;
+  background: linear-gradient(135deg, var(--green-deep) 0%, #1a4a1e 100%);
+  overflow: hidden;
+}
+#about .section-label { color: var(--green-light); }
+#about .section-title { color: white; }
+#about .section-desc { color: rgba(255,255,255,0.7); max-width: none; }
+
+.about-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+  align-items: center;
+}
+.about-visual {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+}
+.about-card {
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: var(--radius-lg); padding: 28px;
+  transition: all 0.3s ease;
+}
+.about-card:hover {
+  background: rgba(255,255,255,0.14);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+.about-card.span2 { grid-column: span 2; }
+.about-card .icon { font-size: 2rem; margin-bottom: 12px; }
+.about-card .title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700; font-size: 1rem; color: white; margin-bottom: 6px;
+}
+.about-card .desc { font-size: 0.85rem; color: rgba(255,255,255,0.6); line-height: 1.5; }
+.about-card .big-num {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2.5rem; font-weight: 900;
+  color: var(--green-lime); line-height: 1;
+}
+
+.about-text .values {
+  display: flex; flex-wrap: wrap; gap: 10px; margin-top: 32px;
+}
+.about-text .value-tag {
+  background: rgba(124,179,66,0.2);
+  border: 1px solid rgba(124,179,66,0.4);
+  color: var(--green-light);
+  padding: 6px 16px; border-radius: 50px;
+  font-size: 0.8rem; font-weight: 600; letter-spacing: 0.5px;
+}
+.about-quote {
+  margin-top: 36px;
+  padding: 24px;
+  background: rgba(255,255,255,0.06);
+  border-left: 3px solid var(--green-lime);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+.about-quote p {
+  font-family: 'Caveat', cursive;
+  font-size: 1.3rem; color: rgba(255,255,255,0.85);
+  line-height: 1.5;
+}
+
+/* ===== PRODUCTS SECTION ===== */
+#products {
+  padding: 120px 0;
+  background: var(--cream);
+}
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px; margin-top: 60px;
+}
+.product-card {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: 36px 28px;
+  border: 1px solid rgba(46,125,50,0.08);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  cursor: pointer; position: relative; overflow: hidden;
+}
+.product-card::before {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
+  background: linear-gradient(135deg, var(--green-lime), var(--green-forest));
+  transform: scaleX(0); transition: transform 0.3s ease;
+  transform-origin: left;
+}
+.product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-xl);
+  border-color: rgba(124,179,66,0.3);
+}
+.product-card:hover::before { transform: scaleX(1); }
+
+.product-icon-wrap {
+  width: 72px; height: 72px;
+  border-radius: var(--radius);
+  background: var(--green-pale);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2rem; margin-bottom: 20px;
+  transition: all 0.3s ease;
+}
+.product-card:hover .product-icon-wrap {
+  background: var(--green-forest); transform: rotate(5deg) scale(1.1);
+}
+.product-card:hover .product-icon-wrap .icon { filter: grayscale(1) brightness(10); }
+
+.product-card h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800; font-size: 1.15rem;
+  color: var(--green-deep); margin-bottom: 10px;
+}
+.product-card p {
+  font-size: 0.875rem; color: var(--gray); line-height: 1.6;
+}
+.product-card .tags {
+  display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px;
+}
+.product-card .tag {
+  background: var(--green-pale);
+  color: var(--green-forest);
+  font-size: 0.7rem; font-weight: 600;
+  padding: 3px 10px; border-radius: 50px;
+  letter-spacing: 0.3px;
+}
+.product-arrow {
+  position: absolute; bottom: 24px; right: 24px;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--green-pale);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--green-forest); font-size: 0.8rem;
+  transition: all 0.3s;
+}
+.product-card:hover .product-arrow {
+  background: var(--green-forest); color: white;
+  transform: translate(3px, -3px);
+}
+
+/* ===== WHY US SECTION ===== */
+#whyus {
+  padding: 120px 0;
+  background: var(--green-pale);
+  overflow: hidden;
+}
+.whyus-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;
+  margin-top: 60px;
+}
+.why-card {
+  position: relative;
+  background: white; border-radius: var(--radius-lg);
+  padding: 40px 32px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  transition: all 0.3s ease; overflow: hidden;
+}
+.why-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+}
+.why-card .num {
+  position: absolute; top: 20px; right: 20px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 5rem; font-weight: 900;
+  color: var(--green-pale);
+  line-height: 1; user-select: none;
+}
+.why-card .icon {
+  width: 56px; height: 56px;
+  background: linear-gradient(135deg, var(--green-lime), var(--green-forest));
+  border-radius: var(--radius);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; color: white; margin-bottom: 20px;
+}
+.why-card h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800; font-size: 1.1rem;
+  color: var(--green-deep); margin-bottom: 10px;
+}
+.why-card p { font-size: 0.875rem; color: var(--gray); line-height: 1.6; }
+
+/* ===== GALLERY SECTION ===== */
+#gallery {
+  padding: 120px 0;
+  background: var(--dark);
+  overflow: hidden;
+}
+#gallery .section-title { color: white; }
+
+.gallery-masonry {
+  columns: 4; column-gap: 16px; margin-top: 60px;
+}
+.gallery-item {
+  break-inside: avoid; margin-bottom: 16px;
+  border-radius: var(--radius); overflow: hidden;
+  position: relative; cursor: pointer;
+}
+.gallery-item-inner {
+  position: relative; overflow: hidden;
+  background: rgba(255,255,255,0.05);
+}
+.gallery-item .placeholder-img {
+  width: 100%; display: block;
+  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.gallery-item:hover .placeholder-img { transform: scale(1.08); }
+.gallery-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(27,94,32,0.85) 0%, transparent 60%);
+  opacity: 0; transition: opacity 0.3s;
+  display: flex; align-items: flex-end; padding: 20px;
+}
+.gallery-item:hover .gallery-overlay { opacity: 1; }
+.gallery-overlay span {
+  color: white; font-family: 'Montserrat', sans-serif;
+  font-weight: 700; font-size: 0.9rem;
+}
+
+/* Gallery placeholder cards */
+.gallery-placeholder {
+  border-radius: var(--radius); overflow: hidden;
+  margin-bottom: 16px; break-inside: avoid;
+  position: relative; cursor: zoom-in;
+  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.gallery-placeholder:hover { transform: scale(1.02); }
+.gallery-placeholder:hover .gallery-overlay { opacity: 1; }
+.gp-inner {
+  position: relative; overflow: hidden;
+}
+.gp-inner:hover .gp-overlay { opacity: 1; }
+.gp-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(27,94,32,0.85), transparent 60%);
+  opacity: 0; transition: opacity 0.4s;
+  display: flex; align-items: flex-end; padding: 16px;
+}
+.gp-overlay span {
+  color: white; font-family: 'Montserrat', sans-serif;
+  font-weight: 700; font-size: 0.85rem;
+}
+
+/* ===== CONTACT SECTION ===== */
+#contact {
+  padding: 120px 0;
+  background: var(--cream);
+  overflow: hidden;
+}
+.contact-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
+  align-items: start; margin-top: 60px;
+}
+
+.contact-card {
+  background: white; border-radius: var(--radius-lg);
+  padding: 40px; box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(46,125,50,0.08);
+}
+.contact-card h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800; font-size: 1.25rem;
+  color: var(--green-deep); margin-bottom: 28px;
+}
+
+.contact-item {
+  display: flex; align-items: flex-start; gap: 16px;
+  padding: 16px 0; border-bottom: 1px solid var(--gray-light);
+}
+.contact-item:last-child { border-bottom: none; }
+.contact-item .icon-wrap {
+  width: 44px; height: 44px; flex-shrink: 0;
+  background: var(--green-pale); border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--green-forest); font-size: 1.1rem;
+}
+.contact-item .contact-info .label {
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--gray); margin-bottom: 4px;
+}
+.contact-item .contact-info .value {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600; color: var(--dark);
+}
+.contact-item .contact-info a {
+  color: var(--green-forest); text-decoration: none;
+}
+.contact-item .contact-info a:hover { text-decoration: underline; }
+
+.schedule-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 8px;
+}
+.schedule-item {
+  background: var(--green-pale); border-radius: 10px;
+  padding: 12px;
+}
+.schedule-item .day {
+  font-size: 0.7rem; font-weight: 700; color: var(--gray);
+  letter-spacing: 1px; text-transform: uppercase;
+}
+.schedule-item .time {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700; color: var(--green-deep); margin-top: 2px;
+}
+
+.social-section { margin-top: 28px; }
+.social-section h4 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700; color: var(--green-deep);
+  margin-bottom: 16px; font-size: 0.9rem;
+}
+.social-links { display: flex; gap: 12px; }
+.social-link {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 18px;
+  border-radius: 50px;
+  text-decoration: none; font-weight: 600; font-size: 0.85rem;
+  transition: all 0.3s ease;
+}
+.social-link.facebook {
+  background: #E8F0FE; color: #1877F2;
+}
+.social-link.instagram {
+  background: #FDE8F0; color: #E1306C;
+}
+.social-link:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
+
+/* Map */
+.map-card {
+  border-radius: var(--radius-lg); overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+.map-card iframe {
+  width: 100%; height: 380px; display: block; border: none;
+}
+.map-cta {
+  padding: 20px;
+  background: white;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.map-cta .address-text {
+  font-size: 0.875rem; color: var(--gray);
+}
+.map-cta .address-text strong {
+  display: block; font-family: 'Montserrat', sans-serif;
+  font-weight: 700; color: var(--dark); margin-bottom: 2px;
+}
+.btn-directions {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--green-forest); color: white;
+  text-decoration: none; padding: 10px 20px;
+  border-radius: 50px; font-weight: 700; font-size: 0.85rem;
+  transition: all 0.3s;
+}
+.btn-directions:hover {
+  background: var(--green-deep);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(46,125,50,0.35);
+}
+
+/* ===== WHATSAPP FLOAT ===== */
+.wa-float {
+  position: fixed; bottom: 28px; right: 28px; z-index: 999;
+  text-decoration: none;
+}
+.wa-btn {
+  width: 62px; height: 62px;
+  background: #25D366; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.8rem; color: white;
+  box-shadow: 0 8px 25px rgba(37,211,102,0.4);
+  position: relative; animation: waPulse 2.5s infinite;
+}
+@keyframes waPulse {
+  0% { box-shadow: 0 0 0 0 rgba(37,211,102,0.5), 0 8px 25px rgba(37,211,102,0.4); }
+  70% { box-shadow: 0 0 0 20px rgba(37,211,102,0), 0 8px 25px rgba(37,211,102,0.4); }
+  100% { box-shadow: 0 0 0 0 rgba(37,211,102,0), 0 8px 25px rgba(37,211,102,0.4); }
+}
+.wa-tooltip {
+  position: absolute; right: 74px; top: 50%;
+  transform: translateY(-50%);
+  background: white; border-radius: 10px;
+  padding: 8px 14px; white-space: nowrap;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+  font-size: 0.8rem; font-weight: 600; color: var(--dark);
+  opacity: 0; transition: opacity 0.3s;
+  pointer-events: none;
+}
+.wa-float:hover .wa-tooltip { opacity: 1; }
+
+/* ===== FOOTER ===== */
+footer {
+  background: var(--green-deep);
+  color: white; padding: 60px 0 0;
+  position: relative; z-index: 10; overflow: hidden;
+}
+footer::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  background: linear-gradient(135deg, var(--green-lime), var(--green-light), var(--accent-gold));
+}
+.footer-grid {
+  max-width: 1200px; margin: 0 auto; padding: 0 48px;
+  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px;
+}
+.footer-brand .logo-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2rem; font-weight: 900;
+  letter-spacing: 3px; color: white;
+}
+.footer-brand .tagline {
+  font-family: 'Caveat', cursive;
+  font-size: 1rem; color: var(--green-light);
+  margin-top: 8px; margin-bottom: 20px;
+  line-height: 1.5;
+}
+.footer-brand p {
+  font-size: 0.85rem; color: rgba(255,255,255,0.6);
+  line-height: 1.7; max-width: 280px;
+}
+.footer-social { display: flex; gap: 10px; margin-top: 24px; }
+.footer-social a {
+  width: 38px; height: 38px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  color: white; text-decoration: none; font-size: 0.95rem;
+  transition: all 0.3s;
+}
+.footer-social a:hover {
+  background: var(--green-lime); border-color: var(--green-lime);
+  transform: translateY(-2px);
+}
+.footer-col h4 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700; font-size: 0.9rem;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--green-light); margin-bottom: 20px;
+}
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.footer-col ul li a {
+  color: rgba(255,255,255,0.65); text-decoration: none;
+  font-size: 0.875rem; transition: color 0.3s;
+  display: flex; align-items: center; gap: 6px;
+}
+.footer-col ul li a:hover { color: var(--green-light); }
+.footer-col ul li a::before { content: '›'; font-size: 1rem; }
+
+.footer-bottom {
+  margin-top: 48px;
+  padding: 20px 48px;
+  max-width: 1200px; margin-left: auto; margin-right: auto;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.footer-copy {
+  font-size: 0.8rem; color: rgba(255,255,255,0.5);
+}
+.footer-made {
+  font-family: 'Caveat', cursive;
+  font-size: 0.95rem; color: rgba(255,255,255,0.4);
+}
+.footer-made span { color: var(--green-lime); }
+
+/* ===== REVEAL ANIMATIONS ===== */
+.reveal {
+  opacity: 0; transform: translateY(40px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1; transform: translateY(0);
+}
+.reveal-left {
+  opacity: 0; transform: translateX(-40px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal-left.visible { opacity: 1; transform: translateX(0); }
+.reveal-right {
+  opacity: 0; transform: translateX(40px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+/* Stagger delays */
+.delay-1 { transition-delay: 0.1s; }
+.delay-2 { transition-delay: 0.2s; }
+.delay-3 { transition-delay: 0.3s; }
+.delay-4 { transition-delay: 0.4s; }
+.delay-5 { transition-delay: 0.5s; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  nav { padding: 14px 28px; }
+  .nav-links { gap: 20px; }
+  .hero-content { grid-template-columns: 1fr; gap: 48px; text-align: center; }
+  .hero-subtitle { max-width: none; }
+  .hero-buttons { justify-content: center; }
+  .hero-stats { justify-content: center; }
+  .hero-visual { display: none; }
+  .about-grid { grid-template-columns: 1fr; gap: 48px; }
+  .whyus-grid { grid-template-columns: 1fr 1fr; }
+  .gallery-masonry { columns: 3; }
+  .contact-grid { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+}
+@media (max-width: 768px) {
+  nav { padding: 12px 20px; }
+  nav.scrolled { padding: 10px 20px; }
+  .nav-links { display: none; position: fixed; inset: 0 0 0 30%; background: white; flex-direction: column; justify-content: center; align-items: center; gap: 32px; z-index: 999; transform: translateX(100%); transition: transform 0.3s ease; }
+  .nav-links.open { transform: translateX(0); display: flex; }
+  .nav-toggle { display: flex; z-index: 1000; }
+  .section-inner { padding: 0 20px; }
+  #hero { padding: 100px 20px 60px; }
+  .hero-title { font-size: 2.8rem; letter-spacing: -1px; }
+  .hero-stats { gap: 20px; flex-wrap: wrap; }
+  .about-visual { grid-template-columns: 1fr; }
+  .about-card.span2 { grid-column: span 1; }
+  .products-grid { grid-template-columns: 1fr; }
+  .whyus-grid { grid-template-columns: 1fr; }
+  .gallery-masonry { columns: 2; }
+  .footer-grid { grid-template-columns: 1fr; }
+  .footer-bottom { flex-direction: column; gap: 8px; text-align: center; padding: 20px; }
+  .wa-float { bottom: 20px; right: 20px; }
+}
+@media (max-width: 480px) {
+  .gallery-masonry { columns: 1; }
+  .hero-buttons { flex-direction: column; align-items: center; }
+  .btn-primary, .btn-secondary { width: 100%; justify-content: center; }
+  .schedule-grid { grid-template-columns: 1fr; }
+}
+
+/* ===== PREFERS REDUCED MOTION ===== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- Loading Screen -->
+<div id="loader">
+  <div class="loader-logo">DIPAMEX</div>
+  <div class="loader-sub">Cargando tu experiencia...</div>
+  <div class="loader-bar-wrap">
+    <div class="loader-bar" id="loaderBar"></div>
+  </div>
+</div>
+
+<!-- Notebook Background -->
+<div class="notebook-bg"></div>
+
+<!-- Particles Canvas -->
+<canvas id="particles-canvas"></canvas>
+
+<!-- WhatsApp Float -->
+<a href="https://wa.me/529613281890?text=Hola%2C%20me%20gustar%C3%ADa%20recibir%20informaci%C3%B3n%20sobre%20los%20productos%20de%20DIPAMEX." 
+   class="wa-float" target="_blank" rel="noopener" aria-label="Contactar por WhatsApp">
+  <div class="wa-btn">
+    <i class="fab fa-whatsapp"></i>
+  </div>
+  <span class="wa-tooltip">¡Escríbenos!</span>
+</a>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="8" y="8" width="13" height="13" rx="2" fill="#7CB342" transform="rotate(45 14.5 14.5)"/>
+        <rect x="22" y="8" width="13" height="13" rx="2" fill="#2E7D32" transform="rotate(45 28.5 14.5)"/>
+      </svg>
+    </div>
+    <div>
+      <div class="logo-text">DIPAMEX</div>
+      <div class="logo-sub">Papelerías</div>
+    </div>
+  </a>
+  
+  <button class="nav-toggle" id="navToggle" aria-label="Menú">
+    <span></span><span></span><span></span>
+  </button>
+  
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about">Nosotros</a></li>
+    <li><a href="#products">Productos</a></li>
+    <li><a href="#gallery">Galería</a></li>
+    <li><a href="#contact">Contacto</a></li>
+    <li><a href="https://wa.me/529613281890?text=Hola%2C%20me%20gustar%C3%ADa%20recibir%20informaci%C3%B3n%20sobre%20los%20productos%20de%20DIPAMEX." 
+           class="nav-cta" target="_blank" rel="noopener">
+      <i class="fab fa-whatsapp"></i> WhatsApp
+    </a></li>
+  </ul>
+</nav>
+
+<!-- HERO SECTION -->
+<section id="hero">
+  <div class="hero-content">
+    <div class="hero-text">
+      <div class="hero-eyebrow">Distribuidora Papelera en Chiapas</div>
+      
+      <h1 class="hero-title" id="heroTitle">
+        <span class="line" id="heroLine1">DI</span><span class="line highlight" id="heroLine2">PAM</span><span class="line" id="heroLine3">EX</span>
+      </h1>
+      
+      <p class="hero-subtitle">
+        Tu aliado en papelería, artículos escolares y de oficina. Líder en distribución mayorista y minorista en Tuxtla Gutiérrez, Chiapas.
+      </p>
+      
+      <div class="hero-buttons">
+        <a href="#products" class="btn-primary">
+          <i class="fas fa-book-open"></i>
+          Ver Catálogo
+        </a>
+        <a href="https://wa.me/529613281890?text=Hola%2C%20me%20gustar%C3%ADa%20recibir%20informaci%C3%B3n%20sobre%20los%20productos%20de%20DIPAMEX." 
+           class="btn-secondary" target="_blank" rel="noopener">
+          <i class="fab fa-whatsapp"></i>
+          Contactar por WhatsApp
+        </a>
+      </div>
+      
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="num" data-count="15">0</div>
+          <div class="label">Años de experiencia</div>
+        </div>
+        <div class="hero-stat">
+          <div class="num" data-count="5000">0</div>
+          <div class="label">Productos disponibles</div>
+        </div>
+        <div class="hero-stat">
+          <div class="num" data-count="1000">0</div>
+          <div class="label">Clientes satisfechos</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="hero-visual" id="heroVisual">
+      <!-- Floating info cards -->
+      <div class="float-el" style="top:-20px;right:-20px;animation-delay:0s;">
+        <div class="float-card">
+          <span class="icon">📦</span>
+          <div class="info">
+            <div class="title">Mayoreo disponible</div>
+            <div class="sub">Precios especiales</div>
+          </div>
+        </div>
+      </div>
+      <div class="float-el" style="bottom:40px;right:-30px;animation-delay:1.5s;">
+        <div class="float-card">
+          <span class="icon">🚀</span>
+          <div class="info">
+            <div class="title">Entrega rápida</div>
+            <div class="sub">Tuxtla Gutiérrez</div>
+          </div>
+        </div>
+      </div>
+      <div class="float-el" style="top:40%;left:-60px;animation-delay:0.8s;">
+        <div class="float-card">
+          <span class="icon">⭐</span>
+          <div class="info">
+            <div class="title">Calidad garantizada</div>
+            <div class="sub">Marcas confiables</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="notebook-open">
+        <div class="notebook-page" id="notebookPage">
+          <div class="notebook-lines"></div>
+          <div class="notebook-hole">
+            <span></span><span></span><span></span>
+          </div>
+          <div class="doodles-container">
+            <svg id="doodlesSvg" viewBox="0 0 340 420" style="width:80%;height:80%;">
+              <!-- Pencil doodle -->
+              <g id="doodle-pencil" opacity="0">
+                <rect x="60" y="30" width="12" height="80" rx="2" fill="#F9A825" stroke="#E65100" stroke-width="1.5"/>
+                <polygon points="60,110 72,110 66,130" fill="#FFECB3" stroke="#E65100" stroke-width="1"/>
+                <rect x="60" y="25" width="12" height="8" rx="1" fill="#EF9A9A"/>
+                <rect x="60" y="30" width="12" height="4" fill="#FFB300"/>
+              </g>
+
+              <!-- Ruler doodle -->
+              <g id="doodle-ruler" opacity="0">
+                <rect x="220" y="20" width="100" height="22" rx="3" fill="#E1F5FE" stroke="#0288D1" stroke-width="1.5"/>
+                <line x1="230" y1="20" x2="230" y2="30" stroke="#0288D1" stroke-width="1"/>
+                <line x1="240" y1="20" x2="240" y2="28" stroke="#0288D1" stroke-width="0.8"/>
+                <line x1="250" y1="20" x2="250" y2="30" stroke="#0288D1" stroke-width="1"/>
+                <line x1="260" y1="20" x2="260" y2="28" stroke="#0288D1" stroke-width="0.8"/>
+                <line x1="270" y1="20" x2="270" y2="30" stroke="#0288D1" stroke-width="1"/>
+                <line x1="280" y1="20" x2="280" y2="28" stroke="#0288D1" stroke-width="0.8"/>
+                <line x1="290" y1="20" x2="290" y2="30" stroke="#0288D1" stroke-width="1"/>
+                <line x1="300" y1="20" x2="300" y2="28" stroke="#0288D1" stroke-width="0.8"/>
+                <line x1="310" y1="20" x2="310" y2="30" stroke="#0288D1" stroke-width="1"/>
+              </g>
+
+              <!-- Notebook small -->
+              <g id="doodle-book" opacity="0">
+                <rect x="90" y="160" width="70" height="90" rx="4" fill="#A5D6A7" stroke="#2E7D32" stroke-width="2"/>
+                <rect x="90" y="160" width="12" height="90" rx="2" fill="#66BB6A"/>
+                <line x1="110" y1="180" x2="148" y2="180" stroke="#2E7D32" stroke-width="1.5"/>
+                <line x1="110" y1="195" x2="148" y2="195" stroke="#2E7D32" stroke-width="1.5"/>
+                <line x1="110" y1="210" x2="148" y2="210" stroke="#2E7D32" stroke-width="1.5"/>
+                <line x1="110" y1="225" x2="148" y2="225" stroke="#2E7D32" stroke-width="1.5"/>
+                <text x="118" y="177" font-family="Caveat, cursive" font-size="9" fill="#1B5E20">notas</text>
+              </g>
+
+              <!-- Calculator -->
+              <g id="doodle-calc" opacity="0">
+                <rect x="200" y="150" width="80" height="110" rx="8" fill="#EDE7F6" stroke="#7E57C2" stroke-width="2"/>
+                <rect x="212" y="162" width="56" height="28" rx="4" fill="#B39DDB"/>
+                <text x="254" y="181" font-family="monospace" font-size="11" fill="#311B92" text-anchor="middle">1247</text>
+                <!-- buttons -->
+                <rect x="212" y="198" width="14" height="12" rx="2" fill="#CE93D8"/>
+                <rect x="230" y="198" width="14" height="12" rx="2" fill="#CE93D8"/>
+                <rect x="248" y="198" width="14" height="12" rx="2" fill="#AB47BC"/>
+                <rect x="266" y="198" width="14" height="12" rx="2" fill="#7E57C2"/>
+                <rect x="212" y="214" width="14" height="12" rx="2" fill="#CE93D8"/>
+                <rect x="230" y="214" width="14" height="12" rx="2" fill="#CE93D8"/>
+                <rect x="248" y="214" width="14" height="12" rx="2" fill="#CE93D8"/>
+                <rect x="266" y="214" width="14" height="12" rx="2" fill="#AB47BC"/>
+                <rect x="212" y="230" width="32" height="12" rx="2" fill="#CE93D8"/>
+                <rect x="248" y="230" width="14" height="12" rx="2" fill="#CE93D8"/>
+                <rect x="266" y="230" width="14" height="12" rx="2" fill="#7B1FA2"/>
+              </g>
+
+              <!-- Scissors -->
+              <g id="doodle-scissors" opacity="0">
+                <circle cx="55" cy="300" r="12" fill="none" stroke="#F44336" stroke-width="2"/>
+                <circle cx="55" cy="300" r="5" fill="#EF9A9A"/>
+                <circle cx="75" cy="280" r="12" fill="none" stroke="#F44336" stroke-width="2"/>
+                <circle cx="75" cy="280" r="5" fill="#EF9A9A"/>
+                <line x1="62" y1="294" x2="160" y2="340" stroke="#F44336" stroke-width="2"/>
+                <line x1="68" y1="286" x2="160" y2="320" stroke="#F44336" stroke-width="2"/>
+              </g>
+
+              <!-- Backpack -->
+              <g id="doodle-backpack" opacity="0">
+                <rect x="120" y="300" width="80" height="95" rx="12" fill="#42A5F5" stroke="#1565C0" stroke-width="2"/>
+                <rect x="130" y="312" width="60" height="35" rx="6" fill="#90CAF9" stroke="#1565C0" stroke-width="1.5"/>
+                <path d="M140 300 Q160 285 180 300" fill="none" stroke="#1565C0" stroke-width="2.5" stroke-linecap="round"/>
+                <circle cx="160" cy="360" r="7" fill="#1565C0"/>
+                <circle cx="160" cy="360" r="4" fill="#42A5F5"/>
+                <line x1="120" y1="340" x2="110" y2="390" stroke="#1565C0" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="200" y1="340" x2="210" y2="390" stroke="#1565C0" stroke-width="2.5" stroke-linecap="round"/>
+              </g>
+
+              <!-- Color pencils cluster -->
+              <g id="doodle-colors" opacity="0">
+                <rect x="230" y="300" width="9" height="65" rx="2" fill="#EF5350" transform="rotate(-10 234 330)"/>
+                <rect x="245" y="300" width="9" height="65" rx="2" fill="#FFA726" transform="rotate(-3 249 330)"/>
+                <rect x="260" y="300" width="9" height="65" rx="2" fill="#FFEE58" transform="rotate(3 264 330)"/>
+                <rect x="275" y="300" width="9" height="65" rx="2" fill="#66BB6A" transform="rotate(10 279 330)"/>
+                <polygon points="230,365 239,365 234,380" fill="#FFCDD2" transform="rotate(-10 234 370)"/>
+                <polygon points="245,365 254,365 249,380" fill="#FFE0B2" transform="rotate(-3 249 370)"/>
+                <polygon points="260,365 269,365 264,380" fill="#FFFDE7" transform="rotate(3 264 370)"/>
+                <polygon points="275,365 284,365 279,380" fill="#DCEDC8" transform="rotate(10 279 370)"/>
+              </g>
+
+              <!-- Star clip / note -->
+              <g id="doodle-note" opacity="0">
+                <rect x="160" y="60" width="100" height="80" rx="3" fill="#FFFDE7" stroke="#FDD835" stroke-width="1.5"/>
+                <line x1="170" y1="78" x2="250" y2="78" stroke="#FDD835" stroke-width="1"/>
+                <line x1="170" y1="90" x2="250" y2="90" stroke="#FDD835" stroke-width="1"/>
+                <line x1="170" y1="102" x2="230" y2="102" stroke="#FDD835" stroke-width="1"/>
+                <text x="175" y="76" font-family="Caveat, cursive" font-size="10" fill="#F57F17">lista de útiles</text>
+                <text x="175" y="89" font-family="Caveat, cursive" font-size="9" fill="#9E9E9E">✓ cuadernos</text>
+                <text x="175" y="101" font-family="Caveat, cursive" font-size="9" fill="#9E9E9E">✓ plumas</text>
+                <text x="175" y="113" font-family="Caveat, cursive" font-size="9" fill="#9E9E9E">✓ colores</text>
+                <!-- Pin -->
+                <circle cx="210" cy="63" r="7" fill="#F44336"/>
+                <circle cx="210" cy="63" r="3" fill="#FFCDD2"/>
+              </g>
+
+              <!-- DIPAMEX brand text in notebook -->
+              <g id="doodle-brand" opacity="0">
+                <text x="170" y="210" font-family="Montserrat, sans-serif" font-size="22" font-weight="900" fill="#2E7D32" text-anchor="middle" letter-spacing="2">DIPAMEX</text>
+                <text x="170" y="228" font-family="Caveat, cursive" font-size="11" fill="#7CB342" text-anchor="middle">Papelerías</text>
+              </g>
+
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT SECTION -->
+<section id="about">
+  <div class="section-inner">
+    <div class="about-grid">
+      <div class="about-text">
+        <p class="section-label reveal">Quiénes somos</p>
+        <h2 class="section-title reveal">Más que una papelería.<br>Tu socio de confianza.</h2>
+        <p class="section-desc reveal" style="color:rgba(255,255,255,0.75);">
+          DIPAMEX es la distribuidora papelera líder en Tuxtla Gutiérrez, Chiapas. Llevamos años siendo el aliado estratégico de escuelas, empresas, oficinas, estudiantes y emprendedores — ofreciendo la mejor selección de productos con precios competitivos y atención personalizada.
+        </p>
+        
+        <div class="values reveal">
+          <span class="value-tag">🎓 Escuelas</span>
+          <span class="value-tag">🏢 Empresas</span>
+          <span class="value-tag">📋 Oficinas</span>
+          <span class="value-tag">🎒 Estudiantes</span>
+          <span class="value-tag">🚀 Emprendedores</span>
+          <span class="value-tag">🛒 Mayoristas</span>
+        </div>
+        
+        <div class="about-quote reveal">
+          <p>"Somos el punto de encuentro entre la calidad y el precio justo para todo Chiapas."</p>
+        </div>
+      </div>
+      
+      <div class="about-visual">
+        <div class="about-card reveal delay-1">
+          <div class="big-num">+15</div>
+          <div class="title">Años en el mercado</div>
+          <div class="desc">Experiencia y confianza que nos respaldan</div>
+        </div>
+        <div class="about-card reveal delay-2">
+          <div class="icon">📦</div>
+          <div class="title">Mayoreo y Menudeo</div>
+          <div class="desc">Precios especiales para compras al por mayor</div>
+        </div>
+        <div class="about-card reveal delay-3">
+          <div class="icon">⭐</div>
+          <div class="title">Calidad Garantizada</div>
+          <div class="desc">Solo trabajamos con marcas reconocidas y confiables</div>
+        </div>
+        <div class="about-card span2 reveal delay-4">
+          <div class="icon">📍</div>
+          <div class="title">Presencia en Chiapas</div>
+          <div class="desc">Estratégicamente ubicados en Tuxtla Gutiérrez para servirte mejor. Distribución a toda la región.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS SECTION -->
+<section id="products">
+  <div class="section-inner">
+    <div style="text-align:center;">
+      <p class="section-label reveal" style="justify-content:center;">Nuestro catálogo</p>
+      <h2 class="section-title reveal">Todo lo que necesitas,<br>en un solo lugar.</h2>
+      <p class="section-desc reveal" style="margin:0 auto 0;">
+        Desde artículos escolares hasta insumos empresariales, somos tu proveedor integral con la mejor relación calidad-precio de Chiapas.
+      </p>
+    </div>
+    
+    <div class="products-grid">
+      <div class="product-card reveal delay-1">
+        <div class="product-icon-wrap"><span class="icon">📚</span></div>
+        <h3>Papelería General</h3>
+        <p>Hojas, cuadernos, folders, libretas, papel bond, cartulinas, y todo lo que necesitas para tu día a día.</p>
+        <div class="tags">
+          <span class="tag">Hojas</span>
+          <span class="tag">Cuadernos</span>
+          <span class="tag">Folders</span>
+        </div>
+        <div class="product-arrow"><i class="fas fa-arrow-right"></i></div>
+      </div>
+      
+      <div class="product-card reveal delay-2">
+        <div class="product-icon-wrap"><span class="icon">✏️</span></div>
+        <h3>Artículos Escolares</h3>
+        <p>Lápices, plumas, colores, reglas, tijeras, pegamento, mochilas, útiles completos para todos los niveles.</p>
+        <div class="tags">
+          <span class="tag">Primaria</span>
+          <span class="tag">Secundaria</span>
+          <span class="tag">Preparatoria</span>
+        </div>
+        <div class="product-arrow"><i class="fas fa-arrow-right"></i></div>
+      </div>
+      
+      <div class="product-card reveal delay-3">
+        <div class="product-icon-wrap"><span class="icon">🖨️</span></div>
+        <h3>Artículos de Oficina</h3>
+        <p>Tintas, tóners, consumibles para impresoras, organizadores, archiveros y todo para tu espacio de trabajo.</p>
+        <div class="tags">
+          <span class="tag">Tintas</span>
+          <span class="tag">Tóners</span>
+          <span class="tag">Organización</span>
+        </div>
+        <div class="product-arrow"><i class="fas fa-arrow-right"></i></div>
+      </div>
+      
+      <div class="product-card reveal delay-1">
+        <div class="product-icon-wrap"><span class="icon">📦</span></div>
+        <h3>Ventas al Mayoreo</h3>
+        <p>Precios especiales para escuelas, empresas y revendedores. Cotizaciones personalizadas sin costo.</p>
+        <div class="tags">
+          <span class="tag">Descuentos</span>
+          <span class="tag">Empresas</span>
+          <span class="tag">Escuelas</span>
+        </div>
+        <div class="product-arrow"><i class="fas fa-arrow-right"></i></div>
+      </div>
+      
+      <div class="product-card reveal delay-2">
+        <div class="product-icon-wrap"><span class="icon">🎨</span></div>
+        <h3>Material Didáctico</h3>
+        <p>Recursos para maestros y educadores: material Montessori, lonas, material visual, juegos educativos.</p>
+        <div class="tags">
+          <span class="tag">Maestros</span>
+          <span class="tag">Kínder</span>
+          <span class="tag">Educación</span>
+        </div>
+        <div class="product-arrow"><i class="fas fa-arrow-right"></i></div>
+      </div>
+      
+      <div class="product-card reveal delay-3">
+        <div class="product-icon-wrap"><span class="icon">🏢</span></div>
+        <h3>Suministros Empresariales</h3>
+        <p>Insumos para oficinas y negocios: papel membretado, sellos, papelería corporativa y más.</p>
+        <div class="tags">
+          <span class="tag">Corporativo</span>
+          <span class="tag">Insumos</span>
+          <span class="tag">Negocios</span>
+        </div>
+        <div class="product-arrow"><i class="fas fa-arrow-right"></i></div>
+      </div>
+    </div>
+    
+    <div style="text-align:center; margin-top:48px;" class="reveal">
+      <a href="https://wa.me/529613281890?text=Hola%2C%20quisiera%20saber%20m%C3%A1s%20sobre%20su%20cat%C3%A1logo%20completo." 
+         class="btn-primary" target="_blank" rel="noopener" style="display:inline-flex;">
+        <i class="fab fa-whatsapp"></i>
+        Solicitar catálogo completo
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- WHY US SECTION -->
+<section id="whyus">
+  <div class="section-inner">
+    <div style="text-align:center;">
+      <p class="section-label reveal" style="justify-content:center;">Por qué elegirnos</p>
+      <h2 class="section-title reveal">La diferencia DIPAMEX</h2>
+    </div>
+    <div class="whyus-grid">
+      <div class="why-card reveal delay-1">
+        <span class="num">01</span>
+        <div class="icon"><i class="fas fa-star"></i></div>
+        <h3>Calidad Garantizada</h3>
+        <p>Todos nuestros productos son de marcas reconocidas y pasan por estrictos controles de calidad.</p>
+      </div>
+      <div class="why-card reveal delay-2">
+        <span class="num">02</span>
+        <div class="icon"><i class="fas fa-tags"></i></div>
+        <h3>Precios Competitivos</h3>
+        <p>Ofrecemos los mejores precios del mercado. Cotizamos sin compromiso y tenemos descuentos por volumen.</p>
+      </div>
+      <div class="why-card reveal delay-3">
+        <span class="num">03</span>
+        <div class="icon"><i class="fas fa-boxes"></i></div>
+        <h3>Amplio Inventario</h3>
+        <p>Más de 5,000 productos disponibles. Todo lo que necesitas para escuela, oficina y negocio.</p>
+      </div>
+      <div class="why-card reveal delay-1">
+        <span class="num">04</span>
+        <div class="icon"><i class="fas fa-headset"></i></div>
+        <h3>Atención Personalizada</h3>
+        <p>Equipo humano y accesible que te ayuda a encontrar exactamente lo que necesitas.</p>
+      </div>
+      <div class="why-card reveal delay-2">
+        <span class="num">05</span>
+        <div class="icon"><i class="fas fa-truck"></i></div>
+        <h3>Surtido Rápido</h3>
+        <p>Listo para surtir pedidos inmediatamente. Atención ágil para que nunca te falte lo esencial.</p>
+      </div>
+      <div class="why-card reveal delay-3">
+        <span class="num">06</span>
+        <div class="icon"><i class="fas fa-handshake"></i></div>
+        <h3>+15 Años de Confianza</h3>
+        <p>Somos la distribuidora con más experiencia y presencia en Tuxtla Gutiérrez, Chiapas.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY SECTION -->
+<section id="gallery">
+  <div class="section-inner">
+    <div style="text-align:center;">
+      <p class="section-label reveal" style="justify-content:center;color:var(--green-light);">Galería</p>
+      <h2 class="section-title reveal" style="color:white;">Un mundo de productos<br>te espera</h2>
+    </div>
+    
+    <div class="gallery-masonry" style="margin-top:60px;">
+      
+      <!-- Gallery items as styled cards with SVG illustrations -->
+      <div class="gallery-placeholder reveal delay-1">
+        <div class="gp-inner">
+          <svg viewBox="0 0 300 220" style="width:100%;display:block;" xmlns="http://www.w3.org/2000/svg">
+            <rect width="300" height="220" fill="#1B5E20"/>
+            <rect x="20" y="30" width="80" height="100" rx="6" fill="#A5D6A7" opacity="0.9"/>
+            <rect x="20" y="30" width="14" height="100" rx="3" fill="#66BB6A"/>
+            <rect x="110" y="50" width="70" height="90" rx="6" fill="#81C784" opacity="0.9"/>
+            <rect x="110" y="50" width="12" height="90" rx="3" fill="#4CAF50"/>
+            <rect x="190" y="20" width="90" height="110" rx="6" fill="#C8E6C9" opacity="0.9"/>
+            <rect x="190" y="20" width="15" height="110" rx="3" fill="#A5D6A7"/>
+            <text x="150" y="175" font-family="Montserrat,sans-serif" font-size="14" font-weight="700" fill="white" text-anchor="middle">Cuadernos y Libretas</text>
+            <text x="150" y="195" font-family="Inter,sans-serif" font-size="10" fill="rgba(255,255,255,0.6)" text-anchor="middle">Gran variedad de formatos</text>
+          </svg>
+          <div class="gp-overlay"><span>📚 Cuadernos</span></div>
+        </div>
+      </div>
+
+      <div class="gallery-placeholder reveal delay-2">
+        <div class="gp-inner">
+          <svg viewBox="0 0 300 300" style="width:100%;display:block;" xmlns="http://www.w3.org/2000/svg">
+            <rect width="300" height="300" fill="#0D47A1"/>
+            <rect x="90" y="40" width="14" height="120" rx="3" fill="#EF5350" transform="rotate(-15 97 100)"/>
+            <polygon points="90,160 104,160 97,180" fill="#FFCDD2" transform="rotate(-15 97 170)"/>
+            <rect x="130" y="30" width="14" height="120" rx="3" fill="#FFA726" transform="rotate(-5 137 90)"/>
+            <polygon points="130,150 144,150 137,170" fill="#FFE0B2" transform="rotate(-5 137 160)"/>
+            <rect x="165" y="25" width="14" height="120" rx="3" fill="#FFEE58" transform="rotate(5 172 85)"/>
+            <polygon points="165,145 179,145 172,165" fill="#FFFDE7" transform="rotate(5 172 155)"/>
+            <rect x="200" y="35" width="14" height="120" rx="3" fill="#66BB6A" transform="rotate(12 207 95)"/>
+            <polygon points="200,155 214,155 207,175" fill="#DCEDC8" transform="rotate(12 207 165)"/>
+            <rect x="235" y="50" width="14" height="120" rx="3" fill="#42A5F5" transform="rotate(20 242 110)"/>
+            <polygon points="235,170 249,170 242,190" fill="#BBDEFB" transform="rotate(20 242 180)"/>
+            <text x="150" y="240" font-family="Montserrat,sans-serif" font-size="13" font-weight="700" fill="white" text-anchor="middle">Colores y Lápices</text>
+            <text x="150" y="260" font-family="Inter,sans-serif" font-size="10" fill="rgba(255,255,255,0.6)" text-anchor="middle">Para todas las edades</text>
+          </svg>
+          <div class="gp-overlay"><span>✏️ Colores</span></div>
+        </div>
+      </div>
+
+      <div class="gallery-placeholder reveal delay-3">
+        <div class="gp-inner">
+          <svg viewBox="0 0 300 180" style="width:100%;display:block;" xmlns="http://www.w3.org/2000/svg">
+            <rect width="300" height="180" fill="#4A148C"/>
+            <rect x="30" y="40" width="100" height="75" rx="8" fill="#EDE7F6" opacity="0.95"/>
+            <rect x="42" y="52" width="76" height="22" rx="4" fill="#B39DDB"/>
+            <text x="80" y="67" font-family="monospace" font-size="11" fill="#311B92" text-anchor="middle">$ 1,245</text>
+            <rect x="42" y="80" width="18" height="14" rx="3" fill="#CE93D8"/>
+            <rect x="64" y="80" width="18" height="14" rx="3" fill="#CE93D8"/>
+            <rect x="86" y="80" width="18" height="14" rx="3" fill="#CE93D8"/>
+            <rect x="108" y="80" width="18" height="14" rx="3" fill="#7E57C2"/>
+            <rect x="42" y="98" width="18" height="14" rx="3" fill="#CE93D8"/>
+            <rect x="64" y="98" width="18" height="14" rx="3" fill="#CE93D8"/>
+            <rect x="86" y="98" width="18" height="14" rx="3" fill="#CE93D8"/>
+            <rect x="108" y="98" width="18" height="14" rx="3" fill="#9C27B0"/>
+            <rect x="170" y="30" width="110" height="130" rx="8" fill="none" stroke="#CE93D8" stroke-width="2" stroke-dasharray="6,4"/>
+            <text x="225" y="75" font-family="Caveat,cursive" font-size="13" fill="#E1BEE7" text-anchor="middle">Calculadoras</text>
+            <text x="225" y="92" font-family="Caveat,cursive" font-size="13" fill="#E1BEE7" text-anchor="middle">científicas y</text>
+            <text x="225" y="109" font-family="Caveat,cursive" font-size="13" fill="#E1BEE7" text-anchor="middle">básicas</text>
+            <text x="150" y="158" font-family="Montserrat,sans-serif" font-size="12" font-weight="700" fill="white" text-anchor="middle">Artículos de Oficina</text>
+          </svg>
+          <div class="gp-overlay"><span>🖨️ Oficina</span></div>
+        </div>
+      </div>
+
+      <div class="gallery-placeholder reveal delay-1">
+        <div class="gp-inner">
+          <svg viewBox="0 0 300 250" style="width:100%;display:block;" xmlns="http://www.w3.org/2000/svg">
+            <rect width="300" height="250" fill="#1A237E"/>
+            <rect x="50" y="50" width="100" height="120" rx="10" fill="#42A5F5"/>
+            <rect x="50" y="50" width="100" height="120" rx="10" fill="none" stroke="#1565C0" stroke-width="2"/>
+            <path d="M70 50 Q100 30 130 50" fill="none" stroke="#1565C0" stroke-width="3" stroke-linecap="round"/>
+            <rect x="65" y="75" width="70" height="45" rx="5" fill="#90CAF9" stroke="#1565C0" stroke-width="1.5"/>
+            <circle cx="100" cy="135" r="9" fill="#1565C0"/>
+            <circle cx="100" cy="135" r="5" fill="#42A5F5"/>
+            <line x1="50" y1="100" x2="38" y2="158" stroke="#1565C0" stroke-width="3" stroke-linecap="round"/>
+            <line x1="150" y1="100" x2="162" y2="158" stroke="#1565C0" stroke-width="3" stroke-linecap="round"/>
+            <rect x="170" y="70" width="110" height="80" rx="6" fill="#E3F2FD" opacity="0.1" stroke="#90CAF9" stroke-width="1"/>
+            <text x="225" y="103" font-family="Caveat,cursive" font-size="12" fill="#90CAF9" text-anchor="middle">Mochilas</text>
+            <text x="225" y="118" font-family="Caveat,cursive" font-size="12" fill="#90CAF9" text-anchor="middle">y maletines</text>
+            <text x="150" y="218" font-family="Montserrat,sans-serif" font-size="13" font-weight="700" fill="white" text-anchor="middle">Artículos Escolares</text>
+          </svg>
+          <div class="gp-overlay"><span>🎒 Útiles Escolares</span></div>
+        </div>
+      </div>
+
+      <div class="gallery-placeholder reveal delay-2">
+        <div class="gp-inner">
+          <svg viewBox="0 0 300 200" style="width:100%;display:block;" xmlns="http://www.w3.org/2000/svg">
+            <rect width="300" height="200" fill="#006064"/>
+            <!-- Sticky notes -->
+            <rect x="20" y="20" width="70" height="70" rx="3" fill="#FFEE58" transform="rotate(-5 55 55)"/>
+            <text x="55" y="50" font-family="Caveat,cursive" font-size="10" fill="#F57F17" text-anchor="middle" transform="rotate(-5 55 55)">lista de</text>
+            <text x="55" y="63" font-family="Caveat,cursive" font-size="10" fill="#F57F17" text-anchor="middle" transform="rotate(-5 55 55)">compras</text>
+            <rect x="100" y="30" width="70" height="70" rx="3" fill="#F48FB1" transform="rotate(3 135 65)"/>
+            <text x="135" y="60" font-family="Caveat,cursive" font-size="10" fill="#880E4F" text-anchor="middle" transform="rotate(3 135 65)">recordar</text>
+            <text x="135" y="73" font-family="Caveat,cursive" font-size="10" fill="#880E4F" text-anchor="middle" transform="rotate(3 135 65)">reunión</text>
+            <rect x="180" y="15" width="70" height="70" rx="3" fill="#80DEEA" transform="rotate(-2 215 50)"/>
+            <text x="215" y="45" font-family="Caveat,cursive" font-size="10" fill="#006064" text-anchor="middle" transform="rotate(-2 215 50)">pedido</text>
+            <text x="215" y="58" font-family="Caveat,cursive" font-size="10" fill="#006064" text-anchor="middle" transform="rotate(-2 215 50)">papelería</text>
+            <rect x="260" y="30" width="30" height="60" rx="3" fill="#A5D6A7" transform="rotate(8 275 60)"/>
+            <text x="150" y="168" font-family="Montserrat,sans-serif" font-size="13" font-weight="700" fill="white" text-anchor="middle">Material Didáctico</text>
+            <text x="150" y="185" font-family="Inter,sans-serif" font-size="10" fill="rgba(255,255,255,0.6)" text-anchor="middle">Notas, organizadores y más</text>
+          </svg>
+          <div class="gp-overlay"><span>🎨 Material Didáctico</span></div>
+        </div>
+      </div>
+
+      <div class="gallery-placeholder reveal delay-3">
+        <div class="gp-inner">
+          <svg viewBox="0 0 300 260" style="width:100%;display:block;" xmlns="http://www.w3.org/2000/svg">
+            <rect width="300" height="260" fill="#33691E"/>
+            <rect x="30" y="30" width="240" height="160" rx="8" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+            <!-- Stacks of products -->
+            <rect x="50" y="100" width="35" height="70" rx="3" fill="#66BB6A"/>
+            <rect x="50" y="80" width="35" height="25" rx="2" fill="#81C784"/>
+            <rect x="50" y="65" width="35" height="18" rx="2" fill="#A5D6A7"/>
+            <rect x="95" y="90" width="35" height="80" rx="3" fill="#42A5F5"/>
+            <rect x="95" y="72" width="35" height="22" rx="2" fill="#64B5F6"/>
+            <rect x="140" y="110" width="35" height="60" rx="3" fill="#FFA726"/>
+            <rect x="140" y="92" width="35" height="22" rx="2" fill="#FFB74D"/>
+            <rect x="185" y="85" width="35" height="85" rx="3" fill="#EF5350"/>
+            <rect x="185" y="68" width="35" height="20" rx="2" fill="#EF9A9A"/>
+            <rect x="230" y="100" width="25" height="70" rx="3" fill="#AB47BC"/>
+            <text x="30" y="215" font-family="Montserrat,sans-serif" font-size="11" font-weight="700" fill="white">Suministros para empresas</text>
+            <text x="30" y="232" font-family="Inter,sans-serif" font-size="9" fill="rgba(255,255,255,0.6)">Mayoreo disponible • Cotiza sin compromiso</text>
+          </svg>
+          <div class="gp-overlay"><span>🏢 Suministros Empresariales</span></div>
+        </div>
+      </div>
+
+    </div>
+    
+    <div style="text-align:center;margin-top:48px;" class="reveal">
+      <a href="https://www.facebook.com/Dipamexmatriz/" target="_blank" rel="noopener" class="btn-primary" style="display:inline-flex;">
+        <i class="fab fa-facebook"></i>
+        Ver más en Facebook
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT SECTION -->
+<section id="contact">
+  <div class="section-inner">
+    <div style="text-align:center;">
+      <p class="section-label reveal" style="justify-content:center;">Encuéntranos</p>
+      <h2 class="section-title reveal">Estamos para servirte</h2>
+    </div>
+    
+    <div class="contact-grid">
+      <div>
+        <div class="contact-card reveal">
+          <h3>Información de Contacto</h3>
+          
+          <div class="contact-item">
+            <div class="icon-wrap"><i class="fas fa-map-marker-alt"></i></div>
+            <div class="contact-info">
+              <div class="label">Dirección</div>
+              <div class="value">Tuxtla Gutiérrez, Chiapas, México</div>
+            </div>
+          </div>
+          
+          <div class="contact-item">
+            <div class="icon-wrap"><i class="fab fa-whatsapp"></i></div>
+            <div class="contact-info">
+              <div class="label">WhatsApp</div>
+              <div class="value">
+                <a href="https://wa.me/529613281890?text=Hola%2C%20me%20gustar%C3%ADa%20recibir%20informaci%C3%B3n%20sobre%20los%20productos%20de%20DIPAMEX." target="_blank">(961) 328-1890</a>
+              </div>
+            </div>
+          </div>
+          
+          <div class="contact-item">
+            <div class="icon-wrap"><i class="fas fa-clock"></i></div>
+            <div class="contact-info">
+              <div class="label">Horarios de atención</div>
+              <div class="schedule-grid" style="margin-top:10px;">
+                <div class="schedule-item">
+                  <div class="day">Lun — Vie</div>
+                  <div class="time">09:00 — 19:00</div>
+                </div>
+                <div class="schedule-item">
+                  <div class="day">Sábado</div>
+                  <div class="time">09:00 — 15:00</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="contact-card reveal" style="margin-top:20px;">
+          <h3>Síguenos en Redes</h3>
+          <div class="social-links">
+            <a href="https://www.facebook.com/Dipamexmatriz/" target="_blank" rel="noopener" class="social-link facebook">
+              <i class="fab fa-facebook-f"></i> Facebook
+            </a>
+            <a href="https://www.instagram.com/dipamex/" target="_blank" rel="noopener" class="social-link instagram">
+              <i class="fab fa-instagram"></i> Instagram
+            </a>
+          </div>
+          <div style="margin-top:20px;">
+            <a href="https://wa.me/529613281890?text=Hola%2C%20me%20gustar%C3%ADa%20recibir%20informaci%C3%B3n%20sobre%20los%20productos%20de%20DIPAMEX." 
+               class="btn-primary" target="_blank" rel="noopener" style="display:inline-flex;width:100%;justify-content:center;">
+              <i class="fab fa-whatsapp"></i>
+              Escríbenos por WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="reveal reveal-right">
+        <div class="map-card">
+          <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d60965.70944219584!2d-93.15792735!3d16.7528844!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85ecd8c2aa53e2c1%3A0x4d70df25048ad72e!2sTuxtla%20Guti%C3%A9rrez%2C%20Chiapas!5e0!3m2!1ses-419!2smx!4v1700000000000!5m2!1ses-419!2smx"
+            allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+            title="Ubicación DIPAMEX en Tuxtla Gutiérrez, Chiapas">
+          </iframe>
+          <div class="map-cta">
+            <div class="address-text">
+              <strong>DIPAMEX Papelerías</strong>
+              Tuxtla Gutiérrez, Chiapas
+            </div>
+            <a href="https://share.google/Ag995M5S4g3FzeedA" target="_blank" rel="noopener" class="btn-directions">
+              <i class="fas fa-directions"></i>
+              Cómo llegar
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="logo-text">DIPAMEX</div>
+      <div class="tagline">"Todo para tu escuela, oficina y negocio<br>en un solo lugar."</div>
+      <p>Distribuidora papelera mayorista y minorista líder en Tuxtla Gutiérrez, Chiapas. Tu aliado de confianza desde hace más de 15 años.</p>
+      <div class="footer-social">
+        <a href="https://www.facebook.com/Dipamexmatriz/" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://www.instagram.com/dipamex/" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="https://wa.me/529613281890?text=Hola%2C%20me%20gustar%C3%ADa%20recibir%20informaci%C3%B3n%20sobre%20los%20productos%20de%20DIPAMEX." target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+      </div>
+    </div>
+    
+    <div class="footer-col">
+      <h4>Productos</h4>
+      <ul>
+        <li><a href="#products">Papelería General</a></li>
+        <li><a href="#products">Artículos Escolares</a></li>
+        <li><a href="#products">Artículos de Oficina</a></li>
+        <li><a href="#products">Material Didáctico</a></li>
+        <li><a href="#products">Mayoreo</a></li>
+      </ul>
+    </div>
+    
+    <div class="footer-col">
+      <h4>Empresa</h4>
+      <ul>
+        <li><a href="#about">Quiénes somos</a></li>
+        <li><a href="#whyus">Por qué elegirnos</a></li>
+        <li><a href="#gallery">Galería</a></li>
+        <li><a href="#contact">Contacto</a></li>
+      </ul>
+    </div>
+    
+    <div class="footer-col">
+      <h4>Contacto</h4>
+      <ul>
+        <li><a href="https://wa.me/529613281890" target="_blank"><i class="fab fa-whatsapp" style="margin-right:4px;"></i>(961) 328-1890</a></li>
+        <li><a href="#contact"><i class="fas fa-clock" style="margin-right:4px;"></i>Lun-Vie 9-19h</a></li>
+        <li><a href="#contact"><i class="fas fa-clock" style="margin-right:4px;"></i>Sáb 9-15h</a></li>
+        <li><a href="https://share.google/Ag995M5S4g3FzeedA" target="_blank"><i class="fas fa-map-marker-alt" style="margin-right:4px;"></i>Cómo llegar</a></li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="footer-bottom" style="max-width:1200px;margin:48px auto 0;padding:20px 48px;border-top:1px solid rgba(255,255,255,0.08);display:flex;justify-content:space-between;align-items:center;">
+    <div class="footer-copy">© 2026 DIPAMEX Papelerías. Todos los derechos reservados. Tuxtla Gutiérrez, Chiapas.</div>
+    <div class="footer-made">Hecho con <span>♥</span> en Chiapas</div>
+  </div>
+</footer>
+
+<script>
+// ===== LOADER =====
+window.addEventListener('load', () => {
+  const loader = document.getElementById('loader');
+  const loaderLogo = loader.querySelector('.loader-logo');
+  const loaderSub = loader.querySelector('.loader-sub');
+  const loaderBar = document.getElementById('loaderBar');
+  
+  // Animate loader
+  setTimeout(() => { loaderLogo.style.opacity = '1'; loaderLogo.style.transition = 'opacity 0.6s'; }, 100);
+  setTimeout(() => { loaderSub.style.opacity = '1'; loaderSub.style.transition = 'opacity 0.6s'; }, 400);
+  setTimeout(() => { loaderBar.style.width = '100%'; }, 300);
+  
+  setTimeout(() => {
+    loader.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    loader.style.opacity = '0';
+    loader.style.transform = 'translateY(-100%)';
+    setTimeout(() => { loader.style.display = 'none'; initAnimations(); }, 600);
+  }, 2200);
+});
+
+// ===== PARTICLES =====
+const canvas = document.getElementById('particles-canvas');
+const ctx = canvas.getContext('2d');
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+const particleSymbols = ['✏️','📚','📎','📐','✂️','📌','🖊️','📏'];
+const particles = [];
+
+class Particle {
+  constructor() { this.reset(); }
+  reset() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height + canvas.height;
+    this.size = Math.random() * 14 + 8;
+    this.speedY = -(Math.random() * 0.4 + 0.15);
+    this.speedX = (Math.random() - 0.5) * 0.3;
+    this.rotation = Math.random() * Math.PI * 2;
+    this.rotSpeed = (Math.random() - 0.5) * 0.01;
+    this.opacity = Math.random() * 0.12 + 0.04;
+    this.symbol = particleSymbols[Math.floor(Math.random() * particleSymbols.length)];
+  }
+  update() {
+    this.y += this.speedY;
+    this.x += this.speedX;
+    this.rotation += this.rotSpeed;
+    if (this.y < -50) this.reset();
+  }
+  draw() {
+    ctx.save();
+    ctx.globalAlpha = this.opacity;
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.rotation);
+    ctx.font = `${this.size}px serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(this.symbol, 0, 0);
+    ctx.restore();
+  }
+}
+
+for (let i = 0; i < 35; i++) {
+  const p = new Particle();
+  p.y = Math.random() * canvas.height;
+  particles.push(p);
+}
+
+function animateParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => { p.update(); p.draw(); });
+  requestAnimationFrame(animateParticles);
+}
+animateParticles();
+
+// ===== NAVBAR =====
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 60) navbar.classList.add('scrolled');
+  else navbar.classList.remove('scrolled');
+});
+
+// Mobile nav toggle
+const navToggle = document.getElementById('navToggle');
+const navLinks = document.getElementById('navLinks');
+navToggle.addEventListener('click', () => {
+  navLinks.classList.toggle('open');
+});
+navLinks.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => navLinks.classList.remove('open'));
+});
+
+// ===== HERO ANIMATIONS =====
+function initAnimations() {
+  if (typeof gsap === 'undefined') return;
+  
+  gsap.registerPlugin(ScrollTrigger);
+  
+  // Hero title animate in
+  gsap.fromTo('#heroLine1,#heroLine2,#heroLine3', 
+    { opacity: 0, y: 60 },
+    { opacity: 1, y: 0, duration: 1, stagger: 0.15, ease: 'power3.out', delay: 0.2 }
+  );
+  
+  gsap.fromTo('.hero-eyebrow', 
+    { opacity: 0, y: 20 },
+    { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out', delay: 0.1 }
+  );
+  
+  gsap.fromTo('.hero-subtitle,.hero-buttons,.hero-stats', 
+    { opacity: 0, y: 30 },
+    { opacity: 1, y: 0, duration: 0.9, stagger: 0.15, ease: 'power2.out', delay: 0.7 }
+  );
+  
+  // Notebook page unfold
+  gsap.fromTo('#notebookPage',
+    { scaleX: 0, transformOrigin: 'left center' },
+    { scaleX: 1, duration: 1.2, ease: 'power3.out', delay: 0.5 }
+  );
+  
+  // Doodles ink in sequence
+  const doodles = ['#doodle-pencil','#doodle-ruler','#doodle-note','#doodle-book','#doodle-calc','#doodle-scissors','#doodle-backpack','#doodle-colors','#doodle-brand'];
+  doodles.forEach((id, i) => {
+    gsap.to(id, { opacity: 1, duration: 0.4, delay: 1.2 + i * 0.2, ease: 'power2.in' });
+  });
+  
+  // Float elements
+  gsap.fromTo('.float-el',
+    { opacity: 0, scale: 0.7 },
+    { opacity: 1, scale: 1, duration: 0.6, stagger: 0.2, ease: 'back.out(1.7)', delay: 2.0 }
+  );
+  
+  // Counter animation
+  document.querySelectorAll('[data-count]').forEach(el => {
+    const target = +el.dataset.count;
+    gsap.fromTo({ val: 0 }, { val: target, duration: 2, delay: 1.2, ease: 'power2.out',
+      onUpdate: function() {
+        el.textContent = Math.round(this.targets()[0].val).toLocaleString() + (target >= 1000 ? '+' : '+');
+      }
+    });
+  });
+  
+  // Scroll parallax for notebook bg
+  gsap.to('.notebook-bg', {
+    yPercent: 15,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: '#hero',
+      start: 'top top',
+      end: 'bottom top',
+      scrub: true
+    }
+  });
+}
+
+// ===== SCROLL REVEAL =====
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => {
+  revealObserver.observe(el);
+});
+
+// ===== SMOOTH SCROLL =====
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+</body>
+</html>
